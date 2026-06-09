@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import styles from "./Auth.module.css";
 import { AuthContext } from "../context/AuthContext";
 
@@ -14,10 +14,6 @@ const Register = () => {
     houseNo: "", street: "", locality: "", city: "", state: "", pinCode: "",
   });
   const [errors, setErrors] = useState({});
-
-  if (!isAuthenticated || !["ADMIN", "RECEPTIONIST"].includes(userRole)) {
-    navigate("/"); return null;
-  }
 
   const handleChange = (e, index, field) => {
     if (field === "middleNames" || field === "emails") {
@@ -75,9 +71,11 @@ const Register = () => {
     } catch { alert("Something went wrong."); }
   };
 
-  const roleOptions = userRole === "ADMIN"
+  const roleOptions = isAuthenticated && userRole === "ADMIN"
     ? [{ value: "RECEPTIONIST", label: "Receptionist" }, { value: "ADMIN", label: "Admin" }]
-    : [{ value: "RECEPTIONIST", label: "Receptionist" }];
+    : isAuthenticated && userRole === "RECEPTIONIST"
+    ? [{ value: "RECEPTIONIST", label: "Receptionist" }]
+    : [{ value: "ADMIN", label: "Admin" }, { value: "RECEPTIONIST", label: "Receptionist" }];
 
   return (
     <div className={styles.page}>
@@ -206,6 +204,13 @@ const Register = () => {
             </>
           )}
         </div>
+
+        {!isAuthenticated && (
+          <p className={styles.switchText}>
+            Already have an account?{" "}
+            <Link to="/login" className={styles.switchLink}>Sign In</Link>
+          </p>
+        )}
       </div>
     </div>
   );

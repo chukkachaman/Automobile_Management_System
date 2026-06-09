@@ -158,6 +158,21 @@
 .submitBtn:hover { background: #2563eb; transform: translateY(-1px); }
 .submitBtn:active { transform: translateY(0); }
 
+.switchText {
+  text-align: center;
+  font-size: 14px;
+  color: #64748b;
+  margin-top: 20px;
+}
+
+.switchLink {
+  color: #3b82f6;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+.switchLink:hover { text-decoration: underline; }
+
 .error {
   background: #fee2e2;
   color: #b91c1c;

@@ -208,3 +208,7 @@
   transition: background 0.15s;
 }
 .btnSubmit:hover { background: #15803d; }
+
+.switchText { text-align: center; font-size: 14px; color: #64748b; margin-top: 20px; }
+.switchLink { color: #3b82f6; font-weight: 600; text-decoration: none; }
+.switchLink:hover { text-decoration: underline; }

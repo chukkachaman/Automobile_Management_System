@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import styles from "./Login.module.css";
 
 const Login = ({ onLogin }) => {
@@ -92,6 +92,10 @@ const Login = ({ onLogin }) => {
               {loading ? "Signing in…" : "Sign In"}
             </button>
           </form>
+          <p className={styles.switchText}>
+            Don&apos;t have an account?{" "}
+            <Link to="/register" className={styles.switchLink}>Sign Up</Link>
+          </p>
         </div>
       </div>
     </div>
