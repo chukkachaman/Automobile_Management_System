@@ -1,93 +1,62 @@
-.container {
-  padding: 30px;
-}
+.container { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
 
-.heading {
-  text-align: center;
-  font-size: 1.8rem;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
+.header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+.heading { font-size: 22px; font-weight: 700; color: #0f172a; }
 
-.filterRow {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 25px;
-  gap: 10px;
-}
+.toolbar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 
-.label {
-  font-weight: 500;
-}
-
-.select {
-  padding: 8px 12px;
+.filterSelect {
+  padding: 8px 32px 8px 12px;
+  border: 1.5px solid #e2e8f0;
   border-radius: 8px;
-  border: 1px solid #ccc;
-}
-
-.loading {
-  text-align: center;
-  color: gray;
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.table th,
-.table td {
-  border: 1px solid #ddd;
-  padding: 12px;
-  text-align: center;
-}
-
-.table th {
-  background-color: #f4f4f4;
-  font-weight: 600;
-}
-
-.noData {
-  text-align: center;
-  color: gray;
-}
-
-.editBtn,
-.invoiceBtn {
-  margin: 0 5px;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 6px;
+  font-size: 14px;
+  color: #0f172a;
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E") no-repeat right 10px center;
+  appearance: none;
   cursor: pointer;
-  color: white;
+  outline: none;
 }
+.filterSelect:focus { border-color: #3b82f6; }
 
-.editBtn {
-  background-color: #007bff;
+.tableWrapper { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; }
+
+.table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.table th {
+  background: #0f172a; color: #fff;
+  padding: 12px 16px; text-align: left;
+  font-size: 12px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.06em;
 }
+.table td { padding: 13px 16px; border-bottom: 1px solid #f1f5f9; color: #1e293b; vertical-align: middle; }
+.table tr:last-child td { border-bottom: none; }
+.table tr:hover td { background: #f8fafc; }
 
-.invoiceBtn {
-  background-color: #28a745;
+.badge {
+  display: inline-flex; align-items: center;
+  padding: 3px 10px; border-radius: 999px;
+  font-size: 12px; font-weight: 600;
 }
+.booked    { background: #dbeafe; color: #1d4ed8; }
+.ongoing   { background: #fef9c3; color: #a16207; }
+.completed { background: #dcfce7; color: #15803d; }
+.cancelled { background: #fee2e2; color: #b91c1c; }
 
-.statusDropdown {
-  padding: 6px;
+.statusSelect {
+  padding: 5px 8px;
+  border: 1px solid #e2e8f0;
   border-radius: 6px;
-  border: 1px solid #ccc;
+  font-size: 13px;
+  color: #0f172a;
+  background: #fff;
+  outline: none;
+  cursor: pointer;
 }
 
-/* Status Colors */
-.booked {
-  background-color: #fff3cd;
-}
-.ongoing {
-  background-color: #cce5ff;
-}
-.completed {
-  background-color: #d4edda;
-}
-.cancelled {
-  background-color: #f8d7da;
-}
+.actions { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.btnView    { padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; background: #eff6ff; color: #2563eb; }
+.btnEdit    { padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; background: #f0fdf4; color: #16a34a; }
+.btnInvoice { padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; background: #faf5ff; color: #7c3aed; }
+
+.empty   { text-align: center; padding: 60px 24px; color: #94a3b8; }
+.loading { text-align: center; padding: 60px; color: #64748b; }
