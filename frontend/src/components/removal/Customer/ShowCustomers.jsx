@@ -4,62 +4,46 @@ import styles from "./ShowCustomers.module.css";
 
 const ShowCustomers = () => {
   const [customers, setCustomers] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const token = localStorage.getItem("token");
+  const [loading, setLoading]     = useState(true);
+  const token   = localStorage.getItem("token");
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
-        const response = await fetch("/api/customers", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (!response.ok) throw new Error("Failed to fetch customers");
-        const data = await response.json();
-        console.log("Fetched customers:", data);
-        setCustomers(data);
-      } catch (err) {
-        console.error("Error fetching customers:", err);
-      } finally {
-        setLoading(false);
-      }
+        const res = await fetch("/api/customers", { headers: { Authorization: `Bearer ${token}` } });
+        if (!res.ok) throw new Error();
+        setCustomers(await res.json());
+      } catch { console.error("Failed to fetch customers"); }
+      finally { setLoading(false); }
     };
     fetchCustomers();
   }, [token]);
 
-  if (loading) return <p className={styles.loading}>Loading customers...</p>;
+  if (loading) return <div className={styles.loading}>Loading customers…</div>;
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.heading}>👥 All Customers</h1>
+      <div className={styles.header}>
+        <h1 className={styles.heading}>Customers ({customers.length})</h1>
+      </div>
 
       {customers.length === 0 ? (
-        <p className={styles.noData}>No customers found.</p>
+        <div className={styles.empty}>No customers found.</div>
       ) : (
-        <div className={styles.cardGrid}>
+        <div className={styles.grid}>
           {customers.map((c) => (
-            <div
-              key={c.customerId}
-              className={styles.card}
-              onClick={() => navigate(`/customer/${c.customerId}`)}
-            >
-              <h2>
-                {c.firstName} {c.lastName}
-              </h2>
-              <p>
-                <strong>Address:</strong> {c.houseNo}, {c.street}, {c.locality},{" "}
-                {c.city}
-              </p>
-              {c.emails && c.emails.length > 0 && (
-                <p>
-                  <strong>Email:</strong> {c.emails[0]}
-                </p>
-              )}
-              {c.phones && c.phones.length > 0 && (
-                <p>
-                  <strong>Phone:</strong> {c.phones[0]}
-                </p>
-              )}
+            <div key={c.customerId} className={styles.card} onClick={() => navigate(`/customer/${c.customerId}`)}>
+              <div className={styles.cardHeader}>
+                <div className={styles.avatar}>👤</div>
+                <div>
+                  <div className={styles.name}>{c.firstName} {c.lastName}</div>
+                  <div className={styles.id}>ID #{c.customerId}</div>
+                </div>
+              </div>
+              <div className={styles.detail}><span>📍</span>{c.houseNo}, {c.street}, {c.locality}, {c.city} — {c.pinCode}</div>
+              {c.emails?.length > 0 && <div className={styles.detail}><span>✉️</span>{c.emails[0]?.email || c.emails[0]}</div>}
+              <div className={styles.cardFooter}>👆 Click to view details</div>
             </div>
           ))}
         </div>
