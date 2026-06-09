@@ -1,193 +1,210 @@
-/* ================================
-   PAGE CONTAINER
-================================ */
+.page {
+  min-height: 100vh;
+  background: #f1f5f9;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 40px 16px 60px;
+}
+
 .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-
-    /* ✅ Soft cyan → white gradient */
-    background: linear-gradient(135deg, #dff9ff, #f2fdff, #ffffff);
-
-    font-family: "Poppins", sans-serif;
+  width: 100%;
+  max-width: 580px;
 }
 
+/* Step indicator */
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 32px;
+}
 
-/* ================================
-   CARD
-================================ */
+.step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.stepCircle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+  border: 2px solid #e2e8f0;
+  background: #fff;
+  color: #94a3b8;
+}
+
+.stepCircle.active {
+  border-color: #3b82f6;
+  background: #3b82f6;
+  color: #fff;
+}
+
+.stepCircle.done {
+  border-color: #22c55e;
+  background: #22c55e;
+  color: #fff;
+}
+
+.stepLabel {
+  font-size: 13px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.stepLabel.active { color: #0f172a; font-weight: 600; }
+
+.stepLine { flex: 1; height: 2px; background: #e2e8f0; margin: 0 8px; }
+.stepLine.done { background: #22c55e; }
+
+/* Card */
 .card {
-    background: white;
-    padding: 2rem;
-    border-radius: 1.2rem;
-    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
-
-    width: 400px;
-    max-width: 90%;
-    text-align: center;
-
-    margin-top: 160px; /* ✅ push below navbar */
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 36px 32px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
 }
 
-h2 {
-    margin-bottom: 1.4rem;
-    color: #333;
-    font-weight: 600;
+.cardTitle {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 4px;
+  letter-spacing: -0.4px;
 }
 
-
-/* ================================
-   FORM
-================================ */
-.form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.3rem;
+.cardSubtitle {
+  font-size: 14px;
+  color: #64748b;
+  margin-bottom: 28px;
 }
 
+/* Form rows */
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+.fieldFull { grid-column: 1 / -1; }
 
-/* ================================
-   INPUT GROUP (Elliptical + Floating Label)
-================================ */
-.inputGroup {
-    position: relative;
+.label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-.inputGroup input,
-.inputGroup select {
-    width: 100%;
-    padding: 14px 18px;
+.input, .select {
+  padding: 10px 13px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 7px;
+  font-size: 14px;
+  color: #0f172a;
+  background: #fff;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  outline: none;
+  width: 100%;
+}
+.input:focus, .select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+}
+.input::placeholder { color: #94a3b8; }
 
-    border: 1.8px solid #cfd8e3;
-    border-radius: 25px; /* ✅ elliptical round */
-    background: white;
-
-    font-size: 15px;
-    transition: 0.3s ease;
-    outline: none;
-
-    box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+/* Multi-value row */
+.multiRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
 }
 
-.inputGroup input:focus,
-.inputGroup select:focus {
-    border-color: #3b82f6;
-    box-shadow: 0 0 6px rgba(59, 130, 246, 0.35);
+.removeBtn {
+  background: #fee2e2;
+  color: #dc2626;
+  border: none;
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.12s;
+}
+.removeBtn:hover { background: #fecaca; }
+
+.addBtn {
+  background: transparent;
+  color: #3b82f6;
+  border: 1.5px dashed #93c5fd;
+  border-radius: 7px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.12s;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.addBtn:hover { background: #eff6ff; border-color: #3b82f6; }
+
+.errorText {
+  font-size: 12px;
+  color: #dc2626;
+  margin-top: 2px;
 }
 
-/* Floating label */
-.inputGroup label {
-    position: absolute;
-    top: 50%;
-    left: 20px;
+.formActions { display: flex; gap: 12px; margin-top: 8px; }
 
-    transform: translateY(-50%);
-    background: white;
-    padding: 0 6px;
-
-    color: #777;
-    transition: 0.25s ease;
-    pointer-events: none;
+.btnNext {
+  flex: 1;
+  padding: 12px;
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
 }
+.btnNext:hover { background: #2563eb; }
 
-/* On focus or typed */
-.inputGroup input:focus + label,
-.inputGroup input:not(:placeholder-shown) + label,
-.inputGroup select:focus + label,
-.inputGroup select:not([value=""]) + label {
-    top: -10px;
-    left: 18px;
-    font-size: 12px;
-    color: #3b82f6;
+.btnBack {
+  padding: 12px 20px;
+  background: transparent;
+  color: #64748b;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
 }
+.btnBack:hover { background: #f8fafc; color: #0f172a; }
 
-
-/* ================================
-   SMALL ADD / REMOVE BUTTONS
-================================ */
-.addButton,
-.removeButton {
-    border: none;
-    padding: 6px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 13px;
-    transition: 0.25s;
+.btnSubmit {
+  flex: 1;
+  padding: 12px;
+  background: #16a34a;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
 }
-
-.addButton {
-    background: #10b981;
-    color: white;
-}
-
-.addButton:hover {
-    background: #059669;
-}
-
-.removeButton {
-    background: #ef4444;
-    color: white;
-    position: absolute;
-    right: -10px;
-    top: -10px;
-}
-
-.removeButton:hover {
-    background: #dc2626;
-}
-
-
-/* ================================
-   PRIMARY BUTTON
-================================ */
-.button {
-    padding: 12px;
-    background: linear-gradient(135deg, #3b82f6, #60a5fa);
-
-    color: white;
-    border: none;
-    border-radius: 25px; /* ✅ elliptical */
-    font-size: 16px;
-    cursor: pointer;
-    font-weight: 600;
-
-    transition: 0.25s ease;
-}
-
-.button:hover {
-    transform: translateY(-2px);
-    opacity: 0.95;
-}
-
-
-/* ================================
-   ERROR MESSAGE
-================================ */
-.error {
-    color: #ef4444;
-    font-size: 12px;
-    text-align: left;
-    margin-top: -8px;
-}
-
-
-/* ================================
-   VERIFIED TEXT (Not used here)
-================================ */
-.verified {
-    font-size: 16px;
-    color: green;
-    margin-left: 10px;
-}
-
-
-/* ================================
-   RESPONSIVE
-================================ */
-@media (max-width: 480px) {
-    .card {
-        width: 92%;
-        padding: 1.6rem;
-    }
-}
+.btnSubmit:hover { background: #15803d; }
