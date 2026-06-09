@@ -1,0 +1,193 @@
+/* ================================
+   PAGE CONTAINER
+================================ */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+    /* ✅ Soft cyan → white gradient */
+    background: linear-gradient(135deg, #dff9ff, #f2fdff, #ffffff);
+
+    font-family: "Poppins", sans-serif;
+}
+
+
+/* ================================
+   CARD
+================================ */
+.card {
+    background: white;
+    padding: 2rem;
+    border-radius: 1.2rem;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+
+    width: 400px;
+    max-width: 90%;
+    text-align: center;
+
+    margin-top: 160px; /* ✅ push below navbar */
+}
+
+h2 {
+    margin-bottom: 1.4rem;
+    color: #333;
+    font-weight: 600;
+}
+
+
+/* ================================
+   FORM
+================================ */
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.3rem;
+}
+
+
+/* ================================
+   INPUT GROUP (Elliptical + Floating Label)
+================================ */
+.inputGroup {
+    position: relative;
+}
+
+.inputGroup input,
+.inputGroup select {
+    width: 100%;
+    padding: 14px 18px;
+
+    border: 1.8px solid #cfd8e3;
+    border-radius: 25px; /* ✅ elliptical round */
+    background: white;
+
+    font-size: 15px;
+    transition: 0.3s ease;
+    outline: none;
+
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.inputGroup input:focus,
+.inputGroup select:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 6px rgba(59, 130, 246, 0.35);
+}
+
+/* Floating label */
+.inputGroup label {
+    position: absolute;
+    top: 50%;
+    left: 20px;
+
+    transform: translateY(-50%);
+    background: white;
+    padding: 0 6px;
+
+    color: #777;
+    transition: 0.25s ease;
+    pointer-events: none;
+}
+
+/* On focus or typed */
+.inputGroup input:focus + label,
+.inputGroup input:not(:placeholder-shown) + label,
+.inputGroup select:focus + label,
+.inputGroup select:not([value=""]) + label {
+    top: -10px;
+    left: 18px;
+    font-size: 12px;
+    color: #3b82f6;
+}
+
+
+/* ================================
+   SMALL ADD / REMOVE BUTTONS
+================================ */
+.addButton,
+.removeButton {
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: 0.25s;
+}
+
+.addButton {
+    background: #10b981;
+    color: white;
+}
+
+.addButton:hover {
+    background: #059669;
+}
+
+.removeButton {
+    background: #ef4444;
+    color: white;
+    position: absolute;
+    right: -10px;
+    top: -10px;
+}
+
+.removeButton:hover {
+    background: #dc2626;
+}
+
+
+/* ================================
+   PRIMARY BUTTON
+================================ */
+.button {
+    padding: 12px;
+    background: linear-gradient(135deg, #3b82f6, #60a5fa);
+
+    color: white;
+    border: none;
+    border-radius: 25px; /* ✅ elliptical */
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: 600;
+
+    transition: 0.25s ease;
+}
+
+.button:hover {
+    transform: translateY(-2px);
+    opacity: 0.95;
+}
+
+
+/* ================================
+   ERROR MESSAGE
+================================ */
+.error {
+    color: #ef4444;
+    font-size: 12px;
+    text-align: left;
+    margin-top: -8px;
+}
+
+
+/* ================================
+   VERIFIED TEXT (Not used here)
+================================ */
+.verified {
+    font-size: 16px;
+    color: green;
+    margin-left: 10px;
+}
+
+
+/* ================================
+   RESPONSIVE
+================================ */
+@media (max-width: 480px) {
+    .card {
+        width: 92%;
+        padding: 1.6rem;
+    }
+}
