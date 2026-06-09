@@ -1,230 +1,138 @@
 import React, { useEffect, useState, useContext } from "react";
 import styles from "./InventoryPage.module.css";
 import { AuthContext } from "../context/AuthContext";
-import { Trash2, PlusCircle, MinusCircle } from "lucide-react";
 
 const InventoryPage = () => {
   const { userRole } = useContext(AuthContext);
   const token = localStorage.getItem("token");
 
   const [inventory, setInventory] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [newItem, setNewItem] = useState({
-    name: "",
-    quantityAvailable: "",
-    unitPrice: "",
-  });
+  const [loading, setLoading]     = useState(true);
+  const [newItem, setNewItem]     = useState({ name: "", quantityAvailable: "", unitPrice: "" });
+  const [adjustQty, setAdjustQty] = useState({});
 
-  const [adjustQuantities, setAdjustQuantities] = useState({}); // store per-item adjustment values
-
-  // ✅ Fetch all inventory
   const fetchInventory = async () => {
     try {
-      const res = await fetch("/api/inventory", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!res.ok) throw new Error("Failed to fetch inventory");
+      const res = await fetch("/api/inventory", { headers: { Authorization: `Bearer ${token}` } });
+      if (!res.ok) throw new Error();
       const data = await res.json();
       setInventory(data);
-
-      // initialize adjustments as empty
-      const init = {};
-      data.forEach((i) => (init[i.partId] = ""));
-      setAdjustQuantities(init);
-    } catch (err) {
-      console.error("Error fetching inventory:", err);
-    } finally {
-      setLoading(false);
-    }
+      const init = {}; data.forEach(i => (init[i.partId] = "")); setAdjustQty(init);
+    } catch { console.error("Failed to fetch inventory"); }
+    finally { setLoading(false); }
   };
 
-  useEffect(() => {
-    fetchInventory();
-  }, []);
+  useEffect(() => { fetchInventory(); }, []);
 
-  // ✅ Add new item
   const handleAddItem = async (e) => {
     e.preventDefault();
     try {
       const res = await fetch("/api/inventory", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify(newItem),
       });
-      if (!res.ok) throw new Error("Failed to add item");
-      alert("✅ Item added successfully!");
+      if (!res.ok) throw new Error();
       setNewItem({ name: "", quantityAvailable: "", unitPrice: "" });
       fetchInventory();
-    } catch (err) {
-      console.error(err);
-      alert("❌ Could not add item");
-    }
+    } catch { alert("Could not add item"); }
   };
 
-  // ✅ Increase / Decrease stock
   const updateStock = async (partId, type) => {
-    const qty = adjustQuantities[partId];
-    if (!qty || isNaN(qty) || qty <= 0) {
-      alert("Enter a valid quantity");
-      return;
-    }
-
-    const endpoint =
-      type === "increase"
-        ? `/api/inventory/${partId}/increase?quantity=${qty}`
-        : `/api/inventory/${partId}/decrease?quantity=${qty}`;
-
+    const qty = adjustQty[partId];
+    if (!qty || isNaN(qty) || qty <= 0) { alert("Enter a valid quantity"); return; }
     try {
-      const res = await fetch(endpoint, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
+      const res = await fetch(`/api/inventory/${partId}/${type}?quantity=${qty}`, {
+        method: "POST", headers: { Authorization: `Bearer ${token}` },
       });
-      if (!res.ok) throw new Error("Failed to update stock");
+      if (!res.ok) throw new Error();
       fetchInventory();
-      // reset this item’s adjust field
-      setAdjustQuantities((prev) => ({ ...prev, [partId]: "" }));
-    } catch (err) {
-      console.error(err);
-      alert(`❌ Failed to ${type} stock`);
-    }
+      setAdjustQty(prev => ({ ...prev, [partId]: "" }));
+    } catch { alert(`Failed to ${type} stock`); }
   };
 
-  // ✅ Delete item
   const handleDelete = async (partId) => {
-    if (!window.confirm("Are you sure you want to delete this item?")) return;
-    try {
-      const res = await fetch(`/api/inventory/${partId}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!res.ok) throw new Error("Failed to delete item");
-      fetchInventory();
-    } catch (err) {
-      console.error(err);
-      alert("❌ Failed to delete item");
-    }
+    if (!window.confirm("Delete this inventory item?")) return;
+    const res = await fetch(`/api/inventory/${partId}`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
+    if (res.ok) fetchInventory(); else alert("Failed to delete item");
   };
 
-  if (loading) return <p className={styles.loading}>Loading inventory...</p>;
+  if (loading) return <div className={styles.loading}>Loading inventory…</div>;
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.heading}>🧾 Inventory Management</h1>
+      <div className={styles.header}>
+        <h1 className={styles.heading}>Inventory</h1>
+      </div>
 
-      {/* ✅ Add Section */}
       {userRole === "ADMIN" && (
-        <section className={styles.addSection}>
-          <h2>Add New Inventory Item</h2>
-          <form onSubmit={handleAddItem} className={styles.form}>
-            <input
-              type="text"
-              placeholder="Part Name"
-              value={newItem.name}
-              onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
-              required
-            />
-            <input
-              type="number"
-              placeholder="Initial Quantity"
-              value={newItem.quantityAvailable}
-              onChange={(e) =>
-                setNewItem({ ...newItem, quantityAvailable: e.target.value })
-              }
-              required
-            />
-            <input
-              type="number"
-              placeholder="Unit Price (₹)"
-              value={newItem.unitPrice}
-              onChange={(e) =>
-                setNewItem({ ...newItem, unitPrice: e.target.value })
-              }
-              required
-            />
-            <button type="submit">➕ Add Item</button>
+        <div className={styles.addCard}>
+          <div className={styles.addTitle}>Add New Part</div>
+          <form onSubmit={handleAddItem}>
+            <div className={styles.addRow}>
+              <div className={styles.field}>
+                <label className={styles.label}>Part Name</label>
+                <input className={styles.input} type="text" placeholder="e.g. Brake Pad" value={newItem.name} onChange={e => setNewItem({ ...newItem, name: e.target.value })} required />
+              </div>
+              <div className={styles.field}>
+                <label className={styles.label}>Quantity</label>
+                <input className={styles.input} type="number" placeholder="0" value={newItem.quantityAvailable} onChange={e => setNewItem({ ...newItem, quantityAvailable: e.target.value })} required />
+              </div>
+              <div className={styles.field}>
+                <label className={styles.label}>Unit Price (₹)</label>
+                <input className={styles.input} type="number" step="0.01" placeholder="0.00" value={newItem.unitPrice} onChange={e => setNewItem({ ...newItem, unitPrice: e.target.value })} required />
+              </div>
+              <button type="submit" className={styles.addBtn}>+ Add</button>
+            </div>
           </form>
-        </section>
+        </div>
       )}
 
-      {/* ✅ Table */}
-      <section className={styles.inventoryList}>
-        <h2>Current Inventory</h2>
+      <div className={styles.tableWrapper}>
         {inventory.length === 0 ? (
-          <p>No inventory items found.</p>
+          <div className={styles.empty}>No inventory items yet.</div>
         ) : (
           <table className={styles.table}>
             <thead>
               <tr>
-                <th>Part ID</th>
+                <th>#</th>
                 <th>Part Name</th>
-                <th>Quantity</th>
-                <th>Unit Price (₹)</th>
+                <th>Stock</th>
+                <th>Unit Price</th>
                 {userRole === "ADMIN" && <th>Adjust Stock</th>}
-                {userRole === "ADMIN" && <th>Actions</th>}
+                {userRole === "ADMIN" && <th>Action</th>}
               </tr>
             </thead>
             <tbody>
-              {inventory.map((item) => (
+              {inventory.map(item => (
                 <tr key={item.partId}>
                   <td>{item.partId}</td>
-                  <td>{item.name}</td>
+                  <td><strong>{item.name}</strong></td>
                   <td>{item.quantityAvailable}</td>
-                  <td>{item.unitPrice}</td>
-
+                  <td>₹{Number(item.unitPrice).toFixed(2)}</td>
                   {userRole === "ADMIN" && (
-                    <>
-                      <td className={styles.adjustCell}>
+                    <td>
+                      <div className={styles.qtyCell}>
                         <input
-                          type="number"
-                          min="1"
-                          placeholder="Qty"
-                          value={adjustQuantities[item.partId] ?? ""}
-                          onChange={(e) =>
-                            setAdjustQuantities({
-                              ...adjustQuantities,
-                              [item.partId]: e.target.value,
-                            })
-                          }
-                          className={styles.adjustInput}
+                          className={styles.qtyInput}
+                          type="number" min="1" placeholder="qty"
+                          value={adjustQty[item.partId] ?? ""}
+                          onChange={e => setAdjustQty(prev => ({ ...prev, [item.partId]: e.target.value }))}
                         />
-                        <div className={styles.adjustButtons}>
-                          <button
-                            onClick={() => updateStock(item.partId, "increase")}
-                            className={styles.increaseBtn}
-                            title="Add Stock"
-                          >
-                            <PlusCircle size={18} />
-                          </button>
-                          <button
-                            onClick={() => updateStock(item.partId, "decrease")}
-                            className={styles.decreaseBtn}
-                            title="Remove Stock"
-                          >
-                            <MinusCircle size={18} />
-                          </button>
-                        </div>
-                      </td>
-
-                      <td>
-                        <button
-                          onClick={() => handleDelete(item.partId)}
-                          className={styles.deleteBtn}
-                          title="Delete Item"
-                        >
-                          <Trash2 size={18} />
-                        </button>
-                      </td>
-                    </>
+                        <button className={styles.incBtn} title="Increase" onClick={() => updateStock(item.partId, "increase")}>+</button>
+                        <button className={styles.decBtn} title="Decrease" onClick={() => updateStock(item.partId, "decrease")}>−</button>
+                      </div>
+                    </td>
+                  )}
+                  {userRole === "ADMIN" && (
+                    <td><button className={styles.deleteBtn} onClick={() => handleDelete(item.partId)}>Delete</button></td>
                   )}
                 </tr>
               ))}
             </tbody>
           </table>
         )}
-      </section>
+      </div>
     </div>
   );
 };
